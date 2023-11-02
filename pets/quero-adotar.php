@@ -75,9 +75,6 @@ if(isset($_POST['submit']))
                                 $query = $mysqli->query("SELECT especie FROM animais ORDER BY especie ASC");
                                 while ($option = $query->fetch_assoc()) {
                                     ?>
-                                
-
-                                
                                     <option value="<?php echo $option['especie']; ?>"><?php echo $option['especie']?></option>
                                     <?php
                                 }
@@ -100,7 +97,14 @@ if(isset($_POST['submit']))
                         <div class="form-group py-2">
                             <label for="porte" class="text-capitalize text-light">Porte</label>
                             <select name="porte" id="porte" class="form-control form-select">
-                                <option value="" selected disabled>Selecione</option>
+                            <?php 
+                                $query = $mysqli->query("SELECT porte FROM animais ORDER BY porte ASC");
+                                while ($option = $query->fetch_assoc()) {
+                                    ?>
+                                    <option value="<?php echo $option['porte']; ?>"><?php echo $option['porte']?></option>
+                                    <?php
+                                }
+                                ?>
                             </select>
                         </div>
 

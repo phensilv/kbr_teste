@@ -109,6 +109,7 @@ include('protect.php');
                     </a>
 
                     <a href="cadastrar.php" class="btn btn-light">+ Cadastrar Usuário</a>
+                    <a href="cadastrarAnimal.php" class="btn btn-light">+ Cadastrar Animal</a>
                 </div>
             </div>
 
