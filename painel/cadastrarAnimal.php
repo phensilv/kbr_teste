@@ -1,6 +1,6 @@
 <?php 
 
-include('conexao.php');
+/*include('conexao.php');
 
 if (isset($_POST['nome']) && isset($_POST['img']) && isset($_POST['especie']) && isset($_POST['idade']) && isset($_POST['peso']) && isset($_POST['porte']) && isset($_POST['local']) && isset($_POST['sobre']) && isset($_POST['status'])) {
     $nome = $_POST['nome'];
@@ -13,6 +13,35 @@ if (isset($_POST['nome']) && isset($_POST['img']) && isset($_POST['especie']) &&
     $sobre = $_POST['sobre'];
     $status = $_POST['status'];
 
+    //variaveis upload imagem
+    
+    $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
+    $novo_nome = md5(time()) . $extensao;
+    $diretorio = "upload/";
+    $upload = move_uploaded_file($_FILES['img']['tmp_name'], $diretorio.$novo_nome);
+
+    //Funções para upload de imagem
+
+    if (empty($_FILES['img'])) {
+        $errors[] = "A IMAGEM!!!";
+    }
+    if (empty($errors)) {
+        $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
+        $upload = move_uploaded_file($_FILES['img']['tmp_name'], $diretorio.$novo_nome);
+        if ($mysqli->query($sql_code_img, $upload)) {
+            echo "A IMAGEM FOI";
+            //$msg = "Arquivo enviado com sucesso";
+        } else {
+            echo "A IMAGEM N FOI" . mysqli_error($mysqli);
+            //$msg = "Falha ao enviar o arquivo";
+        }
+    } else {
+        foreach ($errors as $error) {
+            echo $error . "<br>";
+        }
+    }
+
+    //erros
     $errors = array();
 
 
@@ -22,7 +51,7 @@ if (isset($_POST['nome']) && isset($_POST['img']) && isset($_POST['especie']) &&
 
     /*if (empty($img)) {
         $errors[] = "Insira ao menos uma imagem";
-    }*/
+    }*//*
 
     if (empty($especie)) {
         $errors[] = "Preencha a especie";
@@ -63,7 +92,7 @@ if (isset($_POST['nome']) && isset($_POST['img']) && isset($_POST['especie']) &&
             echo $error . "<br>";
         }
     }
-}
+}*/
 
 /*if(isset($_FILES['img'])){
     $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
@@ -92,6 +121,57 @@ if (isset($_POST['nome']) && isset($_POST['img']) && isset($_POST['especie']) &&
     }
     
 }*/
+
+include('conexao.php');
+$errors = array();
+
+if (isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_POST['porte'], $_POST['local'], $_POST['sobre'], $_POST['status'])) {
+    $nome = $_POST['nome'];
+    $especie = $_POST['especie'];
+    $idade = $_POST['idade'];
+    $peso = $_POST['peso'];
+    $porte = $_POST['porte'];
+    $local = $_POST['local'];
+    $sobre = $_POST['sobre'];
+    $status = $_POST['status'];
+
+    if (empty($nome) || empty($especie) || empty($idade) || empty($peso) || empty($porte) || empty($local) || empty($sobre) || empty($status)) {
+        $errors[] = "Preencha todos os campos obrigatórios.";
+    }
+
+    
+    if (!empty($_FILES['img']['name'])) {
+        $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
+        $novo_nome = md5(time()) . $extensao;
+        $diretorio = "upload/";
+
+        if (move_uploaded_file($_FILES['img']['tmp_name'], $diretorio . $novo_nome)) {
+            
+            $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
+
+            if ($mysqli->query($sql_code_img)) {
+                echo "A imagem enviada com sucesso.";
+            } else {
+                echo "Erro ao inserir a imagem: " . mysqli_error($mysqli);
+            }
+        } else {
+            $errors[] = "Falha ao fazer upload da imagem.";
+        }
+    }
+
+    
+    if (empty($errors)) {
+        $sql_code_animal = "INSERT INTO animais (nome_animal, especie, idade, peso, porte, local, sobre, status) VALUES ('$nome', '$especie', '$idade', '$peso', '$porte', '$local', '$sobre', '$status')";
+
+        if ($mysqli->query($sql_code_animal)) {
+            echo " Registro inserido com sucesso.";
+        } else {
+            echo " Erro ao inserir o registro: " . mysqli_error($mysqli);
+        }
+    }
+} else {
+    echo "Preencha todos os campos obrigatórios.";
+}
 ?>
 
 <!DOCTYPE html>

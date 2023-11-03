@@ -1,3 +1,41 @@
+<?php 
+require_once('conexao.php');
+
+if (isset($_GET['id_animais'])) {
+    $animal_id = $_GET['id_animais'];
+
+    
+    $sql = "SELECT * FROM animais WHERE id_animais = $animal_id";
+    $animal_result = mysqli_query($mysqli, $sql);
+
+    if ($animal_result) {
+        
+        if ($animal = mysqli_fetch_assoc($animal_result)) {
+            
+            echo "<h1>{$animal['nome_animal']}</h1>";
+            echo "<p>Espécie: {$animal['especie']}</p>";
+            echo "<p>Idade: {$animal['idade']}</p>";
+            echo "<p>Peso: {$animal['peso']}</p>";
+            echo "<p>Porte: {$animal['porte']}</p>";
+            echo "<p>Local: {$animal['local']}</p>";
+            echo "<p>Sobre o animal: {$animal['sobre']}</p>";
+            echo "<p>Status: {$animal['status']}</p>";
+        } else {
+            
+            echo "Animal não encontrado.";
+        }
+    } else {
+        
+        echo "Erro na consulta ao banco de dados.";
+    }
+} else {
+    
+    echo "Selecione um animal válido.";
+}
+?>
+
+
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
@@ -76,7 +114,7 @@
                 
                 <div class="py-3 col-4 d-flex flex-wrap row-gap-3">                   
                     <h2 class="col-12 d-flex align-items-center gap-2">
-                        Tini 
+                    <?php echo $animal['nome']; ?> 
 
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
                             <path fill="#FF7373" fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
@@ -89,17 +127,17 @@
 
                     <div class="col-12">
                         <h3 class="fs-sm destaque m-0">Código</h3> 
-                        <div>873012</div>
+                        <div><?php echo $animal['id_animais']; ?></div>
                     </div>
 
                     <div class="col-6">
                         <h3 class="fs-sm destaque m-0">Espécie</h3> 
-                        <div>Gato</div>
+                        <div><?php echo $animal['especie']; ?></div>
                     </div>
 
                     <div class="col-6">
                         <h3 class="fs-sm destaque m-0">Porte</h3> 
-                        <div>Médio</div>
+                        <div><?php echo $animal['porte']; ?></div>
                     </div>
 
                     <div class="col-12">
@@ -109,22 +147,22 @@
 
                     <div class="col-6">
                         <h3 class="fs-sm destaque m-0">Peso</h3> 
-                        <div>5 Kg</div>
+                        <div><?php echo $animal['peso']; ?> Kg</div>
                     </div>
 
                     <div class="col-6">
                         <h3 class="fs-sm destaque m-0">Idade</h3> 
-                        <div>3 anos</div>
+                        <div><?php echo $animal['idade']; ?> anos</div>
                     </div>
 
                     <div class="col-12">
                         <h3 class="fs-sm destaque m-0">Local</h3> 
-                        <div>Bom Retiro, Curitiba - PR</div>
+                        <div><?php echo $animal['local']; ?></div>
                     </div>
                     
                     <div class="col-12">
                         <h3 class="fs-sm destaque m-0">Sobre</h3> 
-                        <div>💖 Frajolinha Fêmea de narizinho rosa</div>
+                        <div><?php echo $animal['sobre']; ?></div>
                     </div>
 
                     <div class="col-12">
