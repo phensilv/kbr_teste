@@ -45,3 +45,78 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
+                        include('conexao.php');
+$errors = array();
+
+if (isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_POST['porte'], $_POST['local'], $_POST['sobre'], $_POST['status'])) {
+    $nome = $_POST['nome'];
+    $especie = $_POST['especie'];
+    $idade = $_POST['idade'];
+    $peso = $_POST['peso'];
+    $porte = $_POST['porte'];
+    $local = $_POST['local'];
+    $sobre = $_POST['sobre'];
+    $status = $_POST['status'];
+
+    if (empty($nome) || empty($especie) || empty($idade) || empty($peso) || empty($porte) || empty($local) || empty($sobre) || empty($status)) {
+        $errors[] = "Preencha todos os campos obrigatórios.";
+    }
+
+    
+    if (!empty($_FILES['img']['name'])) {
+        $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
+        $novo_nome = md5(time()) . $extensao;
+        $diretorio = "upload/";
+
+        if (move_uploaded_file($_FILES['img']['tmp_name'], $diretorio . $novo_nome)) {
+            
+            $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
+
+            if ($mysqli->query($sql_code_img)) {
+                echo "A imagem enviada com sucesso.";
+            } else {
+                echo "Erro ao inserir a imagem: " . mysqli_error($mysqli);
+            }
+        } else {
+            $errors[] = "Falha ao fazer upload da imagem.";
+        }
+    }
+
+    
+    if (empty($errors)) {
+        $sql_code_animal = "INSERT INTO animais (nome_animal, especie, idade, peso, porte, local, sobre, status) VALUES ('$nome', '$especie', '$idade', '$peso', '$porte', '$local', '$sobre', '$status')";
+
+        if ($mysqli->query($sql_code_animal)) {
+            echo " Registro inserido com sucesso.";
+        } else {
+            echo " Erro ao inserir o registro: " . mysqli_error($mysqli);
+        }
+    }
+} else {
+    echo "Preencha todos os campos obrigatórios.";
+}
+?>
+
+
+/*if (!empty($_FILES['img']['name'])) {
+        $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
+        $novo_nome = md5(time()) . $extensao;
+        $diretorio = "upload/";
+
+        if (move_uploaded_file($_FILES['img']['tmp_name'], $diretorio . $novo_nome)) {
+            
+            $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
+
+            if ($mysqli->query($sql_code_img)) {
+                echo "A imagem enviada com sucesso.";
+            } else {
+                echo "Erro ao inserir a imagem: " . mysqli_error($mysqli);
+            }
+        } else {
+            $errors[] = "Falha ao fazer upload da imagem.";
+        }
+    }*/

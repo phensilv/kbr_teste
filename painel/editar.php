@@ -1,3 +1,17 @@
+<?php 
+include('protect.php');
+
+if(!empty($GET['id']))
+{
+    include_once('conexao.php');
+    $id = $_GET['id'];
+
+    $sqlSelect = "SELECT * FROM usuarios WHERE id=$id";
+
+    $result = $mysqli->query($sqlSelect);
+}
+?>
+
 <!DOCTYPE html>
 <html lang="pt-br" class="h-100">
 <head>

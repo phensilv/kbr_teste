@@ -1,24 +1,27 @@
 <?php 
-
+include('protect.php');
 include('conexao.php');
 
-if (isset($_POST['usuario']) || isset($_POST['email']) || isset($_POST['senha']) || isset($_POST['confSenha'])) {
+if (isset($_POST['usuario'], $_POST['email'], $_POST['senha'])) {
     $usuario = $_POST['usuario'];
     $email = $_POST['email'];
-    $senha = $_POST['senha'];
-    $confsenha = $_POST['confSenha'];
+    $senha = $_POST['senha']; 
 
-
+    if (!empty($usuario) && !empty($email) && !empty($senha)) {
+        $result = mysqli_query($mysqli, "INSERT INTO usuarios (nome, email, senha) VALUES ('$usuario', '$email', '$senha')");
+        if ($result) {
+            // Inserção bem-sucedida
+            echo "Registro inserido com sucesso.";
+        } else {
+            // Erro na inserção
+            echo "Erro ao inserir o registro: " . mysqli_error($mysqli);
+        }
+    } else {
+        // Um ou mais campos estão vazios
+        echo "Preencha todos os campos do formulário.";
+    }
     
 }
-
-if ($senha === $confsenha) {
-    $result = mysqli_query($mysqli, "INSERT INTO usuarios (nome, email, senha) VALUES ('$usuario', '$email', '$senha')");
-
-}else {
-    echo "As senhas precisam ser idênticas.";
-}
-
 ?>
 
 <!DOCTYPE html>
@@ -106,42 +109,42 @@ if ($senha === $confsenha) {
                 </a>
             </div>
         </aside>
-
         <main class="col h-100 text-light p-4">
+            
             <div class="d-flex align-items-end justify-content-between mb-4">
                 <h1 class="h3">Cadastrar Usuário</h1>
 
                 <a href="painel.php" class="btn btn-light">Voltar</a>
             </div>
 
-            <form action="" method="POST" bg-custom rounded col-12 py-3 px-4> 
+            <form action="" method="POST" class="bg-custom rounded col-12 py-3 px-4"> 
                 
             
                 <div class="mb-3 row">
                     <label for="usuario" class="col-sm-2 col-form-label">Usuário:</label>
                     <div class="col-sm-10">
-                        <input type="text" name="usuario" class="form-control bg-dark text-light border-dark" id="usuario" placeholder="Ex: Admin">
+                        <input type="text" name="usuario" class="form-control bg-dark text-light border-dark" id="usuario" placeholder="Ex: Admin" required>
                     </div>
                 </div>
 
                 <div class="mb-3 row">
                     <label for="email" class="col-sm-2 col-form-label">E-mail:</label>
                     <div class="col-sm-10">
-                        <input type="email" name="email" form-control bg-dark text-light border-dark id="email" placeholder="Ex: admin@kbrtec.com.br">
+                        <input type="email" name="email" class="form-control bg-dark text-light border-dark" id="email" placeholder="Ex: admin@kbrtec.com.br" required >
                     </div>
                 </div>
 
                 <div class="mb-3 row">
                     <label for="senha" class="col-sm-2 col-form-label">Senha:</label>
                     <div class="col-sm-10">
-                        <input type="password" name="senha" class="form-control bg-dark text-light border-dark" id="senha">
+                        <input type="password" name="senha" class="form-control bg-dark text-light border-dark" id="senha" required>
                     </div>
                 </div>
 
                 <div class="mb-3 row">
                     <label for="confSenha" class="col-sm-2 col-form-label">Confirmar Senha:</label>
                     <div class="col-sm-10">
-                        <input type="password" name="confSenha" class="form-control bg-dark text-light border-dark" id="confSenha">
+                        <input type="password" name="confSenha" class="form-control bg-dark text-light border-dark" id="confSenha" required>
                     </div>
                 </div>
 

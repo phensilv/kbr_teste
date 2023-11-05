@@ -149,8 +149,8 @@ if(isset($_POST['submit']))
                             ?>
                                 <div class="col-xxl-3 col-4">
                                     <div class="card rounded overflow-hidden">
-                                        <a href="integra.php">
-                                            <img src="img/bili.webp" alt="" class="w-100 object-fit-cover" height="320">
+                                        <a href="integra.php?id_animais=<?php echo $animal['id_animais']; ?>">
+                                            <img src="upload/<?php echo $animal['titulo_img']; ?>" alt="" class="w-100 object-fit-cover" height="320">
                                         </a>
 
                                         <div class="p-3">

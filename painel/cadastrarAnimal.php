@@ -1,131 +1,12 @@
 <?php 
 
-/*include('conexao.php');
-
-if (isset($_POST['nome']) && isset($_POST['img']) && isset($_POST['especie']) && isset($_POST['idade']) && isset($_POST['peso']) && isset($_POST['porte']) && isset($_POST['local']) && isset($_POST['sobre']) && isset($_POST['status'])) {
-    $nome = $_POST['nome'];
-    $img = $_POST['img'];
-    $especie = $_POST['especie'];
-    $idade = $_POST['idade'];
-    $peso = $_POST['peso'];
-    $porte = $_POST['porte'];
-    $local = $_POST['local'];
-    $sobre = $_POST['sobre'];
-    $status = $_POST['status'];
-
-    //variaveis upload imagem
-    
-    $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
-    $novo_nome = md5(time()) . $extensao;
-    $diretorio = "upload/";
-    $upload = move_uploaded_file($_FILES['img']['tmp_name'], $diretorio.$novo_nome);
-
-    //Funções para upload de imagem
-
-    if (empty($_FILES['img'])) {
-        $errors[] = "A IMAGEM!!!";
-    }
-    if (empty($errors)) {
-        $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
-        $upload = move_uploaded_file($_FILES['img']['tmp_name'], $diretorio.$novo_nome);
-        if ($mysqli->query($sql_code_img, $upload)) {
-            echo "A IMAGEM FOI";
-            //$msg = "Arquivo enviado com sucesso";
-        } else {
-            echo "A IMAGEM N FOI" . mysqli_error($mysqli);
-            //$msg = "Falha ao enviar o arquivo";
-        }
-    } else {
-        foreach ($errors as $error) {
-            echo $error . "<br>";
-        }
-    }
-
-    //erros
-    $errors = array();
-
-
-    if (empty($nome)) {
-        $errors[] = "Preencha o nome do animal";
-    }
-
-    /*if (empty($img)) {
-        $errors[] = "Insira ao menos uma imagem";
-    }*//*
-
-    if (empty($especie)) {
-        $errors[] = "Preencha a especie";
-    }
-
-    if (empty($idade)) {
-        $errors[] = "Preencha a idade";
-    }
-
-    if (empty($peso)) {
-        $errors[] = "Preencha o peso";
-    }
-
-    if (empty($porte)) {
-        $errors[] = "Preencha qual o porte";
-    }
-
-    if (empty($local)) {
-        $errors[] = "Preencha o local no qual está o animal";
-    }
-    if (empty($sobre)) {
-        $errors[] = "Comente sobre o animal";
-    }
-    if (empty($status)) {
-        $errors[] = "Preencha o status";
-    }
-
-    if (empty($errors)) {
-        
-        if (mysqli_query($mysqli, "INSERT INTO animais (nome_animal, especie, idade, peso, porte, local, sobre, status) VALUES ('$nome', '$especie', '$idade', '$peso', '$porte', '$local', '$sobre', '$status')")) {
-            echo "Registro inserido com sucesso.";
-
-        } else {
-            echo "Erro ao inserir o registro: " . mysqli_error($mysqli);
-        }
-    } else {
-        foreach ($errors as $error) {
-            echo $error . "<br>";
-        }
-    }
-}*/
-
-/*if(isset($_FILES['img'])){
-    $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
-    $novo_nome = md5(time()) . $extensao;
-    $diretorio = "upload/";
-
-    //$upload = move_uploaded_file($_FILES['img']['tmp_name'], $diretorio.$novo_nome);
-
-    if (empty($_FILES['img'])) {
-        $errors[] = "A IMAGEM!!!";
-    }
-    if (empty($errors)) {
-        $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
-        $upload = move_uploaded_file($_FILES['img']['tmp_name'], $diretorio.$novo_nome);
-        if ($mysqli->query($sql_code_img, $upload)) {
-            echo "A IMAGEM FOI";
-            //$msg = "Arquivo enviado com sucesso";
-        } else {
-            echo "A IMAGEM N FOI" . mysqli_error($mysqli);
-            //$msg = "Falha ao enviar o arquivo";
-        }
-    } else {
-        foreach ($errors as $error) {
-            echo $error . "<br>";
-        }
-    }
-    
-}*/
-
 include('conexao.php');
+include('protect.php');
 $errors = array();
 
-if (isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_POST['porte'], $_POST['local'], $_POST['sobre'], $_POST['status'])) {
+if (
+    isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_POST['porte'], $_POST['local'], $_POST['sobre'], $_POST['status'], $_FILES['img'])
+) {
     $nome = $_POST['nome'];
     $especie = $_POST['especie'];
     $idade = $_POST['idade'];
@@ -139,38 +20,24 @@ if (isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_
         $errors[] = "Preencha todos os campos obrigatórios.";
     }
 
-    
-    if (!empty($_FILES['img']['name'])) {
+    if (empty($errors)) {
         $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
         $novo_nome = md5(time()) . $extensao;
         $diretorio = "upload/";
-
         if (move_uploaded_file($_FILES['img']['tmp_name'], $diretorio . $novo_nome)) {
-            
-            $sql_code_img = "INSERT INTO arquivo (id_img, nome_img, data) VALUES (null, '$novo_nome', NOW())";
+            $sql_code_animal = "INSERT INTO animais (nome_animal, especie, idade, peso, porte, local, sobre, status, titulo_img, data_hora) VALUES ('$nome', '$especie', '$idade', '$peso', '$porte', '$local', '$sobre', '$status', '$novo_nome', NOW())";
 
-            if ($mysqli->query($sql_code_img)) {
-                echo "A imagem enviada com sucesso.";
+            if ($mysqli->query($sql_code_animal)) {
+                echo "Registro inserido com sucesso.";
             } else {
-                echo "Erro ao inserir a imagem: " . mysqli_error($mysqli);
+                echo "Erro ao inserir o registro: " . mysqli_error($mysqli);
             }
         } else {
-            $errors[] = "Falha ao fazer upload da imagem.";
+            $errors[] = "Erro ao fazer o upload da imagem.";
         }
+    } else {
+        echo implode('<br>', $errors);
     }
-
-    
-    if (empty($errors)) {
-        $sql_code_animal = "INSERT INTO animais (nome_animal, especie, idade, peso, porte, local, sobre, status) VALUES ('$nome', '$especie', '$idade', '$peso', '$porte', '$local', '$sobre', '$status')";
-
-        if ($mysqli->query($sql_code_animal)) {
-            echo " Registro inserido com sucesso.";
-        } else {
-            echo " Erro ao inserir o registro: " . mysqli_error($mysqli);
-        }
-    }
-} else {
-    echo "Preencha todos os campos obrigatórios.";
 }
 ?>
 
@@ -195,7 +62,7 @@ if (isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_
 
                 <div class="col dropdown d-flex align-items-center justify-content-end">
                     <div class="d-flex align-items-center dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                        Bem vindo Admin!
+                        Bem vindo <?php echo $_SESSION['nome'];?>!
     
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-gear-fill ms-2" viewBox="0 0 16 16">
                             <path fill="#6c757D"  d="M9.405 1.05c-.413-1.4-2.397-1.4-2.81 0l-.1.34a1.464 1.464 0 0 1-2.105.872l-.31-.17c-1.283-.698-2.686.705-1.987 1.987l.169.311c.446.82.023 1.841-.872 2.105l-.34.1c-1.4.413-1.4 2.397 0 2.81l.34.1a1.464 1.464 0 0 1 .872 2.105l-.17.31c-.698 1.283.705 2.686 1.987 1.987l.311-.169a1.464 1.464 0 0 1 2.105.872l.1.34c.413 1.4 2.397 1.4 2.81 0l.1-.34a1.464 1.464 0 0 1 2.105-.872l.31.17c1.283.698 2.686-.705 1.987-1.987l-.169-.311a1.464 1.464 0 0 1 .872-2.105l.34-.1c1.4-.413 1.4-2.397 0-2.81l-.34-.1a1.464 1.464 0 0 1-.872-2.105l.17-.31c.698-1.283-.705-2.686-1.987-1.987l-.311.169a1.464 1.464 0 0 1-2.105-.872l-.1-.34zM8 10.93a2.929 2.929 0 1 1 0-5.86 2.929 2.929 0 0 1 0 5.858z"/>
