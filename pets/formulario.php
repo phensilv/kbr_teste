@@ -50,7 +50,24 @@ if (isset($_POST['solicitante']) && isset($_POST['animal_hidden']) && isset($_PO
     }
 }
 
+if (isset($_GET['nome_animal'])) {
+    $nome_animal = $_GET['nome_animal'];
 
+    $sql = "SELECT * FROM animais WHERE nome_animal = $nome_animal";
+    $animal_result = mysqli_query($mysqli, $sql);
+
+    if ($animal_result) {
+        if ($animal = mysqli_fetch_assoc($animal_result)) {
+
+        } else {
+            echo "Animal não encontrado.";
+        }
+    } else {
+        echo "Erro na consulta ao banco de dados.";
+    }
+} else {
+    echo "Selecione um animal válido.";
+}
     
 ?>
 

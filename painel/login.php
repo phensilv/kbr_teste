@@ -1,7 +1,7 @@
 <?php 
 include('conexao.php');
 
-if(isset($_POST['email']) || isset($_POST['password'])) {
+/*if(isset($_POST['email']) || isset($_POST['password'])) {
     
     if(strlen($_POST['email']) == 0){
         echo "Preencha seu email";
@@ -34,8 +34,53 @@ if(isset($_POST['email']) || isset($_POST['password'])) {
         echo "Falha ao logar! Email ou senha incorretos";
         }
     }
+}*/
+
+if (isset($_POST['email']) && isset($_POST['password'])) {
+    $email = $mysqli->real_escape_string($_POST['email']);
+    $senha = $mysqli->real_escape_string($_POST['password']);
+    
+    if (empty($email)) {
+        echo "Preencha seu email";
+    } elseif (empty($senha)) {
+        echo "Preencha sua senha";
+    } else {
+        $sql_code = "SELECT * FROM usuarios WHERE email = '$email'";
+        $sql_query = $mysqli->query($sql_code) or die ("Falha na execução do código SQL: " . $mysqli->error);
+
+        $quantidade = $sql_query->num_rows;
+
+        if ($quantidade == 1) {
+            $usuario = $sql_query->fetch_assoc();
+            
+            if (password_verify($senha, $usuario['senha'])) {
+                if (!isset($_SESSION)) {
+                    session_start();
+                }
+                $_SESSION['id'] = $usuario['id'];
+                $_SESSION['nome'] = $usuario['nome'];
+                header("Location: painel.php");
+            } else {
+                echo "Falha ao logar! Senha incorreta";
+            }
+        } else {
+            echo "Falha ao logar! Email ou senha incorretos";
+        }
+    }
+} else {
+    echo "Preencha email e senha";
 }
+
+    /*if (password_verify($senha, $usuario['senha'])) {
+        // Senha correta
+        // Resto do código de login
+    } else {
+        echo "Senha inserida: " . $senha . "<br>";
+        echo "Senha no banco de dados: " . $usuario['senha'] . "<br>";
+        echo "Falha ao logar! Senha incorreta";
+    }*/
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-br">

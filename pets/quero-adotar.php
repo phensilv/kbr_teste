@@ -71,21 +71,27 @@ if(isset($_POST['submit']))
                         <div class="form-group py-2">
                             <label for="especie" class="text-capitalize text-light">Espécie</label>
                             <select name="especie" id="especie" class="form-control form-select">
-                                <?php 
-                                $query = $mysqli->query("SELECT especie FROM animais ORDER BY especie ASC");
-                                while ($option = $query->fetch_assoc()) {
-                                    ?>
-                                    <option value="<?php echo $option['especie']; ?>"><?php echo $option['especie']?></option>
-                                    <?php
-                                }
-                                ?>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="Cachorro">Cachorro</option>
+                                <option value="Gato">Gato</option>
                             </select>
                         </div>
 
                         <div class="form-group py-2">
                             <label for="raca" class="text-capitalize text-light">Raça</label>
-                            <select name="raca" id="raca" class="form-control form-select">
-                                <option value="" selected disabled>Selecione</option>
+                                <select name="raca" id="raca" class="form-control form-select">
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="Golden Retriever">Golden Retriever</option>
+                                <option value="Labrador Retriever">Labrador Retriever</option>
+                                <option value="Bulldog Inglês">Bulldog Inglês</option>
+                                <option value="Poodle">Poodle</option>
+                                <option value="York Shire">York Shire</option>
+                                <option value="Dachshund">Dachshund</option>
+                                <option value="Siamês">Siamês</option>
+                                <option value="Maine Coon">Maine Coon</option>
+                                <option value="Persa">Persa</option>
+                                <option value="Sphynx">Sphynx</option>
+                                <option value="Bengal">Bengal</option>
                             </select>
                         </div>
 
@@ -97,14 +103,11 @@ if(isset($_POST['submit']))
                         <div class="form-group py-2">
                             <label for="porte" class="text-capitalize text-light">Porte</label>
                             <select name="porte" id="porte" class="form-control form-select">
-                            <?php 
-                                $query = $mysqli->query("SELECT porte FROM animais ORDER BY porte ASC");
-                                while ($option = $query->fetch_assoc()) {
-                                    ?>
-                                    <option value="<?php echo $option['porte']; ?>"><?php echo $option['porte']?></option>
-                                    <?php
-                                }
-                                ?>
+                                <option value="" disabled selected>Selecione</option>
+                                <option value="Pequeno">Pequeno</option>
+                                <option value="Médio">Médio</option>
+                                <option value="Grande">Grande</option>
+                                <option value="Gigante">Gigante</option>
                             </select>
                         </div>
 
@@ -113,12 +116,12 @@ if(isset($_POST['submit']))
                             
                             <div class="bg-light p-2 rounded d-flex flex-wrap row-gap-2">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="sexo" id="femea" value="">
+                                    <input class="form-check-input" type="radio" name="sexo" id="femea" value="femea">
                                     <label class="form-check-label text-capitalize" for="femea">Fêmea</label>
                                 </div>
         
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="sexo" id="macho" value="">
+                                    <input class="form-check-input" type="radio" name="sexo" id="macho" value="macho">
                                     <label class="form-check-label text-capitalize" for="macho">Macho</label>
                                 </div>
                             </div>
@@ -158,10 +161,25 @@ if(isset($_POST['submit']))
 
                                             <div class="d-flex align-items-center gap-2 mt-2 py-2">
                                                 <h3 class="h4 m-0"><?php echo $animal['nome_animal']; ?></h3>
+                                                <?php
+                                                    if ($animal['sexo'] === "macho") {
+                                                        echo '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
+                                                                <path fill="#006AB0" fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                                                        </svg>';
+                                                    } elseif ($animal['sexo'] === "femea") {
+                                                        echo '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
+                                                                <path fill="#FF7373" fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
+                                                        </svg>';
+                                                    } else {
+                                                        echo '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
+                                                                <path fill="#006AB0" fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                                                            </svg>
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
+                                                                <path fill="#FF7373" fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
+                                                            </svg>';
+                                                    }
+                                                ?>
                                                 
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
-                                                    <path fill="#006AB0" fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-                                                </svg>
                                             </div>
 
                                             <p class="mb-4 fs-md"><?php echo $animal['local']; ?></p>

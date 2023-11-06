@@ -5,10 +5,12 @@ include('protect.php');
 $errors = array();
 
 if (
-    isset($_POST['nome'], $_POST['especie'], $_POST['idade'], $_POST['peso'], $_POST['porte'], $_POST['local'], $_POST['sobre'], $_POST['status'], $_FILES['img'])
+    isset($_POST['nome'], $_POST['sexo'], $_POST['especie'], $_POST['raca'], $_POST['idade'], $_POST['peso'], $_POST['porte'], $_POST['local'], $_POST['sobre'], $_POST['status'], $_FILES['img'])
 ) {
     $nome = $_POST['nome'];
+    $sexo = $_POST['sexo'];
     $especie = $_POST['especie'];
+    $raca = $_POST['raca']; 
     $idade = $_POST['idade'];
     $peso = $_POST['peso'];
     $porte = $_POST['porte'];
@@ -16,16 +18,16 @@ if (
     $sobre = $_POST['sobre'];
     $status = $_POST['status'];
 
-    if (empty($nome) || empty($especie) || empty($idade) || empty($peso) || empty($porte) || empty($local) || empty($sobre) || empty($status)) {
+    if (empty($nome) || empty($sexo) || empty($especie) || empty($raca) || empty($idade) || empty($peso) || empty($porte) || empty($local) || empty($sobre) || empty($status)) {
         $errors[] = "Preencha todos os campos obrigatórios.";
     }
-
+    
     if (empty($errors)) {
         $extensao = strtolower(strrchr($_FILES['img']['name'], '.'));
         $novo_nome = md5(time()) . $extensao;
-        $diretorio = "upload/";
+        $diretorio = "../pets/upload/";
         if (move_uploaded_file($_FILES['img']['tmp_name'], $diretorio . $novo_nome)) {
-            $sql_code_animal = "INSERT INTO animais (nome_animal, especie, idade, peso, porte, local, sobre, status, titulo_img, data_hora) VALUES ('$nome', '$especie', '$idade', '$peso', '$porte', '$local', '$sobre', '$status', '$novo_nome', NOW())";
+            $sql_code_animal = "INSERT INTO animais (nome_animal, sexo, especie, raca, idade, peso, porte, local, sobre, status, titulo_img, data_hora) VALUES ('$nome', '$sexo', '$especie', '$raca', '$idade', '$peso', '$porte', '$local', '$sobre', '$status', '$novo_nome', NOW())";
 
             if ($mysqli->query($sql_code_animal)) {
                 echo "Registro inserido com sucesso.";
@@ -98,13 +100,9 @@ if (
 
                     <div class="collapse show" id="menu-usuario">
                         <div class="bg-dark d-flex flex-column rounded mx-4 p-2 row-gap-1">
-                            <a href="cadastrar.php" class="submenu-link link-light text-decoration-none rounded p-2 active">
+                            <a href="cadastrar.php" class="submenu-link link-light text-decoration-none rounded p-2">
                                 <small class="d-flex justify-content-between align-items-center">
-                                    Cadastrar
-                                        
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
-                                    </svg>
+                                    Cadastrar Usuário
                                 </small>
                             </a>
                             <a href="painel.php" class="submenu-link link-light text-decoration-none rounded p-2">
@@ -115,8 +113,38 @@ if (
                         </div>
                     </div>
                 </div>
+                
+                <!--ANIMAIS -->
+                <div class="item">
+                    <div class="w-100 d-flex align-items-center gap-2 link-light text-decoration-none mt-2 py-3 px-3 border-start border-light border-4" type="button" data-bs-toggle="collapse" data-bs-target="#menu-usuario" aria-expanded="true" aria-controls="menu-usuario">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                        </svg>
+    
+                        Animais
+                    </div>
 
-                <a href="login.php" class="w-100 d-flex align-items-center gap-2 link-light text-decoration-none mt-2 py-3 px-3 ms-1 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(-.125rem, 0, 0);">
+                    <div class="collapse show" id="menu-usuario">
+                        <div class="bg-dark d-flex flex-column rounded mx-4 p-2 row-gap-1">
+                            <a href="cadastrarAnimal.php" class="submenu-link link-light text-decoration-none rounded p-2 active">
+                                <small class="d-flex justify-content-between align-items-center">
+                                    Cadastrar Animal
+                                        
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-chevron-right" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L10.293 8 4.646 2.354a.5.5 0 0 1 0-.708z"/>
+                                    </svg>
+                                </small>
+                                
+                            <a href="listagemAnimais.php" class="submenu-link link-light text-decoration-none rounded p-2">
+                                <small class="d-flex justify-content-between align-items-center">
+                                    Listagem
+                                </small>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="logout.php" class="w-100 d-flex align-items-center gap-2 link-light text-decoration-none mt-2 py-3 px-3 ms-1 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(-.125rem, 0, 0);">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
                         <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
@@ -129,7 +157,7 @@ if (
 
         <main class="col h-100 text-light p-4">
             <div class="d-flex align-items-end justify-content-between mb-4">
-                <h1 class="h3">Cadastrar Usuário</h1>
+                <h1 class="h3">Cadastrar Animal</h1>
 
                 <a href="painel.php" class="btn btn-light">Voltar</a>
             </div>
@@ -144,6 +172,20 @@ if (
                     </div>
                 </div>
 
+                <div class="mb-3 row">
+                    <label class="col-sm-2 col-form-label">Sexo:</label>
+                    <div class="col-sm-10">
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="macho" name="sexo" value="macho">
+                            <label class="form-check-label" for="macho">Macho</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" id="femea" name="sexo" value="femea">
+                            <label class="form-check-label" for="femea">Fêmea</label>
+                        </div>
+                    </div>
+                </div>
+                
                 <!--Imagem-->
                 <div class="mb-3 row">
                     <label for="img" class="col-sm-2 col-form-label">Imagem:</label>
@@ -157,14 +199,28 @@ if (
                     <label for="especie" class="col-sm-2 col-form-label">Especie:</label>
                     <div class="col-sm-10">
                         <select name="especie" id="especie" class="form-control form-select bg-secondary text-light border-dark">
-                            <?php 
-                                $query = $mysqli->query("SELECT especie FROM animais ORDER BY especie ASC");
-                                while ($option = $query->fetch_assoc()) {
-                            ?>
-                            <option value="<?php echo $option['especie']; ?>"><?php echo $option['especie']?></option>
-                            <?php
-                                }
-                            ?>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Cachorro">Cachorro</option>
+                            <option value="Gato">Gato</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-3 row">
+                    <label for="raca" class="col-sm-2 col-form-label">Raça:</label>
+                    <div class="col-sm-10">
+                        <select name="raca" id="raca" class="form-control form-select bg-secondary text-light border-dark">
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Golden Retriever">Golden Retriever</option>
+                            <option value="Labrador Retriever">Labrador Retriever</option>
+                            <option value="Bulldog Inglês">Bulldog Inglês</option>
+                            <option value="Poodle">Poodle</option>
+                            <option value="York Shire">York Shire</option>
+                            <option value="Dachshund">Dachshund</option>
+                            <option value="Siamês">Siamês</option>
+                            <option value="Maine Coon">Maine Coon</option>
+                            <option value="Persa">Persa</option>
+                            <option value="Sphynx">Sphynx</option>
+                            <option value="Bengal">Bengal</option>
                         </select>
                     </div>
                 </div>
@@ -188,14 +244,11 @@ if (
                     <label for="porte" class="col-sm-2 col-form-label">Porte</label>
                     <div class="col-sm-10">
                         <select name="porte" id="porte" class="form-control form-select bg-secondary text-light border-dark">
-                            <?php 
-                                $query = $mysqli->query("SELECT porte FROM animais ORDER BY porte ASC");
-                                while ($option = $query->fetch_assoc()) {
-                            ?>
-                            <option value="<?php echo $option['porte']; ?>"><?php echo $option['porte']?></option>
-                            <?php
-                                }
-                            ?>
+                            <option value="" disabled selected>Selecione</option>
+                            <option value="Pequeno">Pequeno</option>
+                            <option value="Médio">Médio</option>
+                            <option value="Grande">Grande</option>
+                            <option value="Gigante">Gigante</option>
                         </select>
                     </div>
                 </div>

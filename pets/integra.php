@@ -73,7 +73,7 @@ if (isset($_GET['id_animais'])) {
             <ol class="breadcrumb m-0">
                 <li class="breadcrumb-item fs-sm"><a href="index.php">Home</a></li>
                 <li class="breadcrumb-item fs-sm"><a href="quero-adotar.php">Quero Adotar</a></li>
-                <li class="breadcrumb-item active fs-sm" aria-current="page">Tini</li>
+                <li class="breadcrumb-item active fs-sm" aria-current="page"><?php echo $animal['nome_animal']; ?></li>
             </ol>
         </div>
     </nav>
@@ -108,14 +108,24 @@ if (isset($_GET['id_animais'])) {
                 <div class="py-3 col-4 d-flex flex-wrap row-gap-3">                   
                     <h2 class="col-12 d-flex align-items-center gap-2">
                     <?php echo $animal['nome_animal']; ?> 
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
-                            <path fill="#FF7373" fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
-                        </svg>
-
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
-                            <path fill="#006AB0" fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
-                        </svg>
+                    <?php
+                        if ($animal['sexo'] === "macho") {
+                            echo '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
+                                        <path fill="#006AB0" fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                                    </svg>';
+                        } elseif ($animal['sexo'] === "femea") {
+                            echo '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
+                                        <path fill="#FF7373" fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
+                                    </svg>';
+                        } else {
+                            echo '<svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-male" viewBox="0 0 16 16">
+                                        <path fill="#006AB0" fill-rule="evenodd" d="M9.5 2a.5.5 0 0 1 0-1h5a.5.5 0 0 1 .5.5v5a.5.5 0 0 1-1 0V2.707L9.871 6.836a5 5 0 1 1-.707-.707L13.293 2H9.5zM6 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8z"/>
+                                    </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-gender-female" viewBox="0 0 16 16">
+                                        <path fill="#FF7373" fill-rule="evenodd" d="M8 1a4 4 0 1 0 0 8 4 4 0 0 0 0-8zM3 5a5 5 0 1 1 5.5 4.975V12h2a.5.5 0 0 1 0 1h-2v2.5a.5.5 0 0 1-1 0V13h-2a.5.5 0 0 1 0-1h2V9.975A5 5 0 0 1 3 5z"/>
+                                </svg>';
+                        }
+                    ?>
                     </h2>
 
                     <div class="col-12">
@@ -135,7 +145,7 @@ if (isset($_GET['id_animais'])) {
 
                     <div class="col-12">
                         <h3 class="fs-sm destaque m-0">Raça</h3> 
-                        <div>American Shorthair</div>
+                        <div><?php echo $animal['raca']; ?></div>
                     </div>
 
                     <div class="col-6">
@@ -159,6 +169,7 @@ if (isset($_GET['id_animais'])) {
                     </div>
 
                     <div class="col-12">
+                            
                         <a href="formulario.php" class="btn btn-custom mt-5 w-100 d-flex align-items-center justify-content-center gap-2">
                             Solicitar adoção
 

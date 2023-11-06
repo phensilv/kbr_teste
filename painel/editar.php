@@ -1,7 +1,7 @@
 <?php 
 include('protect.php');
-
-if(!empty($GET['id']))
+include('conexao.php');
+/*if(!empty($GET['id']))
 {
     include_once('conexao.php');
     $id = $_GET['id'];
@@ -9,6 +9,31 @@ if(!empty($GET['id']))
     $sqlSelect = "SELECT * FROM usuarios WHERE id=$id";
 
     $result = $mysqli->query($sqlSelect);
+}*/
+
+if (isset($_GET['id'])) {
+    $id = $_GET['id'];
+
+    
+    $sql = "SELECT * FROM usuarios WHERE id = $id";
+    $result = mysqli_query($mysqli, $sql);
+
+    if ($result) {
+        
+        if ($usuario = mysqli_fetch_assoc($result)) {
+            
+        
+        } else {
+            
+            echo "Usuario não encontrado.";
+        }
+    } else {
+        
+        echo "Erro na consulta ao banco de dados.";
+    }
+} else {
+    
+    echo "Selecione um usuario válido.";
 }
 ?>
 
@@ -45,7 +70,7 @@ if(!empty($GET['id']))
                             <a class="dropdown-item text-end" href="#">
                                 <small>Alterar Senha</small>
                             </a>
-                            <a class="dropdown-item text-end" href="login.php">
+                            <a class="dropdown-item text-end" href="logout.php">
                                 <small>Sair</small>
                             </a>
                         </li>
@@ -83,7 +108,31 @@ if(!empty($GET['id']))
                     </div>
                 </div>
 
-                <a href="login.php" class="w-100 d-flex align-items-center gap-2 link-light text-decoration-none mt-2 py-3 px-3 ms-1 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(-.125rem, 0, 0);">
+                <div class="item">
+                    <div class="w-100 d-flex align-items-center gap-2 link-light text-decoration-none mt-2 py-3 px-3 border-start border-light border-4" type="button" data-bs-toggle="collapse" data-bs-target="#menu-usuario" aria-expanded="true" aria-controls="menu-usuario">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-person-fill" viewBox="0 0 16 16">
+                            <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                        </svg>
+    
+                        Animais
+                    </div>
+
+                    <div class="collapse show" id="menu-usuario">
+                        <div class="bg-dark d-flex flex-column rounded mx-4 p-2 row-gap-1">
+                            <a href="cadastrarAnimal.php" class="submenu-link link-light text-decoration-none rounded p-2">
+                                <small class="d-flex justify-content-between align-items-center">
+                                    Cadastrar Animal
+                                </small>
+                            </a>
+                            <a href="listagemAnimais.php" class="submenu-link link-light text-decoration-none rounded p-2">
+                                <small class="d-flex justify-content-between align-items-center">
+                                    Listagem
+                                </small>
+                            </a>
+                        </div>
+                    </div>
+
+                <a href="logout.php" class="w-100 d-flex align-items-center gap-2 link-light text-decoration-none mt-2 py-3 px-3 ms-1 icon-link icon-link-hover" style="--bs-icon-link-transform: translate3d(-.125rem, 0, 0);">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor" class="bi bi-box-arrow-left" viewBox="0 0 16 16">
                         <path fill-rule="evenodd" d="M6 12.5a.5.5 0 0 0 .5.5h8a.5.5 0 0 0 .5-.5v-9a.5.5 0 0 0-.5-.5h-8a.5.5 0 0 0-.5.5v2a.5.5 0 0 1-1 0v-2A1.5 1.5 0 0 1 6.5 2h8A1.5 1.5 0 0 1 16 3.5v9a1.5 1.5 0 0 1-1.5 1.5h-8A1.5 1.5 0 0 1 5 12.5v-2a.5.5 0 0 1 1 0v2z"/>
                         <path fill-rule="evenodd" d="M.146 8.354a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L1.707 7.5H10.5a.5.5 0 0 1 0 1H1.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3z"/>
@@ -101,32 +150,33 @@ if(!empty($GET['id']))
                 <a href="painel.php" class="btn btn-light">Voltar</a>
             </div>
 
-            <form action="" class="bg-custom rounded col-12 py-3 px-4">
+            <form action="saveEdit.php" method="POST" class="bg-custom rounded col-12 py-3 px-4">
                 
-                <div class="mb-3 row">
-                    <label for="usuario" class="col-sm-2 col-form-label">Usuário:</label>
-                    <div class="col-sm-10">
-                        <input type="text" class="form-control bg-dark text-light border-dark" id="usuario" placeholder="Ex: Admin" value="Admin">
-                    </div>
+            <div class="mb-3 row">
+                <label for="usuario" class="col-sm-2 col-form-label">Usuário:</label>
+                <div class="col-sm-10">
+                    <input type="text" name="usuario" class="form-control bg-dark text-light border-dark" id="usuario" placeholder="Ex: Admin" value="<?php echo $usuario['nome']; ?>">
                 </div>
+            </div>
 
-                <div class="mb-3 row">
-                    <label for="email" class="col-sm-2 col-form-label">E-mail:</label>
-                    <div class="col-sm-10">
-                        <input type="email" class="form-control bg-dark text-light border-dark" id="email" placeholder="Ex: admin@kbrtec.com.br" value="admin@kbrtec.com.br">
-                    </div>
+            <div class="mb-3 row">
+                <label for="email" class="col-sm-2 col-form-label">E-mail:</label>
+                <div class="col-sm-10">
+                    <input type="email" name="email" class="form-control bg-dark text-light border-dark" id="email" placeholder="Ex: admin@kbrtec.com.br" value="<?php echo $usuario['email']; ?>">
                 </div>
+            </div>
 
-                <div class="mb-3 row">
-                    <label for="senha" class="col-sm-2 col-form-label">Senha:</label>
-                    <div class="col-sm-10">
-                        <input type="password" class="form-control bg-dark text-light border-dark" id="senha">
-                    </div>
+            <div class="mb-3 row">
+                <label for="senha" class="col-sm-2 col-form-label">Senha:</label>
+                <div class="col-sm-10">
+                    <input type="password" name="senha" class="form-control bg-dark text-light border-dark" id="senha">
                 </div>
+            </div>
 
-                <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-light">Salvar</button>
-                </div>
+            <div class="d-flex justify-content-end">
+                <input type="hidden" name="id" value="<?php echo $id?>">
+                <button type="submit" name="update" class="btn btn-light">Salvar</button>
+            </div>
             </form>
 
             <div class="bg-custom rounded overflow-hidden">
