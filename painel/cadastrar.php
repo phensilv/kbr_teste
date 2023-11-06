@@ -10,14 +10,14 @@ if (isset($_POST['usuario'], $_POST['email'], $_POST['senha'])) {
     if (!empty($usuario) && !empty($email) && !empty($senha)) {
         $result = mysqli_query($mysqli, "INSERT INTO usuarios (nome, email, senha) VALUES ('$usuario', '$email', '$senha')");
         if ($result) {
-            // Inserção bem-sucedida
+            
             echo "Registro inserido com sucesso.";
         } else {
-            // Erro na inserção
+            
             echo "Erro ao inserir o registro: " . mysqli_error($mysqli);
         }
     } else {
-        // Um ou mais campos estão vazios
+        
         echo "Preencha todos os campos do formulário.";
     }
     

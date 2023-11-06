@@ -1,15 +1,7 @@
 <?php 
 include('protect.php');
 include('conexao.php');
-/*if(!empty($GET['id']))
-{
-    include_once('conexao.php');
-    $id = $_GET['id'];
 
-    $sqlSelect = "SELECT * FROM usuarios WHERE id=$id";
-
-    $result = $mysqli->query($sqlSelect);
-}*/
 
 if (isset($_GET['id'])) {
     $id = $_GET['id'];

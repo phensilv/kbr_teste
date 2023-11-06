@@ -200,14 +200,13 @@ if (isset($_GET['nome_animal'])) {
 </body>
 
 <script>
-  // Função para mostrar a mensagem de sucesso e depois ocultá-la
+
   function exibirMensagemSucesso() {
     var mensagem = document.getElementById("mensagem-sucesso");
-    mensagem.style.display = "block"; // Mostrar a mensagem
-
-    // Ocultar a mensagem após 5 segundos (5000 ms)
+    mensagem.style.display = "block"; 
+   
     setTimeout(function() {
-      mensagem.style.display = "none"; // Ocultar a mensagem
+      mensagem.style.display = "none"; 
     }, 5000);
   }
 </script>
